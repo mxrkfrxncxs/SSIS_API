@@ -1,4 +1,15 @@
-function handleDelete(studentId, csrfToken) {
+document.addEventListener('DOMContentLoaded', function() {
+  // Add event listener to the delete button inside the modal
+  document.querySelectorAll('.confirm-delete-student').forEach(function(button) {
+      button.addEventListener('click', function() {
+          var studentId = this.getAttribute('student-id');
+          var csrfToken = this.getAttribute('csrf-token');
+          handleDeleteStudent(studentId, csrfToken);
+      });
+  });
+});
+
+function handleDeleteStudent(studentId, csrfToken) {
   fetch(`/delete_student/${studentId}`, {
       method: 'DELETE',
       headers: {
@@ -18,30 +29,35 @@ function handleDelete(studentId, csrfToken) {
   });
 }
 
-// Add event listener to the delete button
-document.getElementById('confirmDeleteBtn').addEventListener('click', function() {
-  var studentId = document.querySelector('.btn-danger').getAttribute('student-id');
-  var csrfToken = document.querySelector('.btn-danger').getAttribute('csrf-token');
-  handleDelete(studentId, csrfToken);
-});
 
-
-function confirmDeleteCourse(button) {
-  var course_code= button.getAttribute('course-code');
-  var csrfToken = button.getAttribute('csrf-token');
-  if (confirm("Are you sure you want to delete " + course_code + "?\nStudents under this Course will also be deleted.\n")) {
-      fetch(`/delete_course/${course_code}`, {
-          method: 'DELETE',
-          headers: {
-              'X-CSRFToken': csrfToken
-          }
-      }).then(response => response.json())
-      .then(data => {
-        if(data.success == true) {
-          window.location.reload( );
-        } else {
-          console.error("Error: " + data.error)
-        }
-      });
-  }
+// Function to handle delete course action
+function handleDeleteCourse(courseId, csrfToken) {
+  fetch(`/delete_course/${courseId}`, {
+      method: 'DELETE',
+      headers: {
+          'X-CSRFToken': csrfToken
+      }
+  })
+  .then(response => {
+      if (response.ok) {
+          window.location.reload(); // Reload the page after successful deletion
+      } else {
+          alert('Failed to delete course.'); // Display an alert if deletion fails
+      }
+  })
+  .catch(error => {
+      console.error('Error:', error);
+      alert('An error occurred. Please try again later.'); // Display an alert if an error occurs
+  });
 }
+
+// Add event listener to delete course buttons
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.confirm-delete-course').forEach(function(button) {
+      button.addEventListener('click', function() {
+          var courseId = this.getAttribute('course-id');
+          var csrfToken = this.getAttribute('csrf-token');
+          handleDeleteCourse(courseId, csrfToken);
+      });
+  });
+});

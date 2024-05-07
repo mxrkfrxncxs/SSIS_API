@@ -11,26 +11,11 @@
             <form method="POST" class="form-control">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                 <div class="form-group">
-                    <label for="course_code">Course Code</label>
-                    <input type="text" class="form-control" id="course_code" name="course_code" value="{{course_code}}" disabled required>
-                    <input name="course_code" value="{{course_code}}" hidden>
-                </div> 
-                <div class="form-group">
                     <label for="course_name">Course Name</label>
                     <input type="text" class="form-control" id="course_name" name="course_name" value="{{course_name}}" required>
-                </div> 
-                <div class="form-group">
-                    <label for="college_code">College Code</label>
-                    <select class="form-control" id="college_code" name="college_code" required>
-                        <option value="{{ college_code }}" selected>{{ college_code }}</option>
-                        {% for college in colleges %}
-                            {% if college.collegecode != college_code %}
-                                <option value="{{ college.collegecode }}">{{ college.collegecode }}</option>
-                            {% endif %}
-                        {% endfor %}
-                    </select>
                 </div> <br>
                 <button type="submit" class="btn btn-primary col-md-12">Update Course</button>
+                <button type="button" class="btn btn-secondary col-md-12" onclick="window.location.href='/courses'" style="margin-top: 10px;">Back</button>
             </form>
         </div>
     </div>
