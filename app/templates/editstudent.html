@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+{% set curr_tab = "students" %}
+{% block content1 %}
+<title>Edit Student</title>
+{% endblock %}
+{% block content2 %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-10" style="overflow: auto;">
+            <h1 class="text-center" style="padding: 10px;">Edit Student</h1>
+            <form method="POST" class="form-control">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <div class="form-group">
+                    <label for="name"> Name</label>
+                    <input type="text" class="form-control" id="name" name="name" value="{{name}}" required>
+                </div>
+                <div class="form-group">
+                    <label for="course">Course</label>
+                    <select class="form-select" id="course" name="course" required>
+                        <option value="{{ curr_course_id }}" selected>{{ curr_course }}</option>
+                        {% for option_course in courses %}
+                            {% if option_course['course_name'] != curr_course %}
+                                <option value="{{ option_course['course_id'] }}">{{ option_course['course_name'] }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>                                    
+                </div> <br>
+                <button type="submit" class="btn btn-primary col-md-12">Update Student</button>
+                <button type="button" class="btn btn-secondary col-md-12" onclick="window.location.href='/students'" style="margin-top: 10px;">Back</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock%}

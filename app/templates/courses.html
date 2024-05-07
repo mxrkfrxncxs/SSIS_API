@@ -1,0 +1,68 @@
+{% extends "layout.html" %}
+{% set curr_tab = "courses" %}
+{% block content1 %}
+  <title>Courses</title>
+{% endblock %}
+{% block content2%}
+<div class="container" style = "padding-top: 10px;">
+  <h1 class="text-center" style="padding: 10px;">Courses List</h1>
+  <div class="row">
+      <div class="col-md-10">
+        <form method="POST" action="/courses/search">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <div class="input-group mb-3">
+              <input type="text" class="form-control col-md-10" name="coursesearch" placeholder="Search Course" value="{{ search_query }}">
+              <div class="input-group-append">
+                  <button class="btn btn-primary" type="submit">Search</button>
+              </div>
+          </div>
+        </form>
+      </div>
+      <div class="col-md-2">
+          <a class="btn btn-success col-md-12" href="/add_course">Add</a>
+      </div>
+  </div>
+</div>
+<div class="container">
+  <div class="row">
+      <div class="col">
+          <div id="coursesTableDiv"  style="max-height: 400px; overflow: auto;">
+              <table class="table table-condensed text-center">
+                  <thead>
+                      <tr>
+                          <th>Course Code</th>
+                          <th>Course Name</th>
+                          <th>College Code</th>
+                          <th>Action</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                    {% if courses | length == 0 %}
+                    <tr>
+                      <p> No course found </p>
+                    </tr>
+                    {% else %}
+                      {% for course in courses %}
+                      <tr>
+                        <td><a href="/view_course/{{ course.coursecode }}">{{ course.coursecode }}</a></td>
+                        <td>{{ course.coursename }}</td>
+                        <td>{{ course.collegecode }}</td>
+                        <td>
+                          <form method="get" action="/edit_course">
+                              <input type="hidden" name="course_code" value="{{ course.coursecode }}">
+                              <input type="hidden" name="course_name" value="{{ course.coursename }}">
+                              <input type="hidden" name="college_code" value="{{ course.collegecode }}">
+                              <button class="btn btn-warning btn-sm" type="submit">Edit</button>
+                          </form>
+                          <button class="btn btn-danger btn-sm" course-code="{{ course.coursecode }}" csrf-token="{{ csrf_token() }}" onclick="confirmDeleteCourse(this)">Delete</button>
+                        </td>                    
+                      </tr>
+                      {% endfor %}
+                    {% endif %}
+                  </tbody>
+              </table>
+          </div>
+      </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+{% set curr_tab = "students" %}
+{% block content1 %}
+<title>Add Student</title>
+{% endblock %}
+{% block content2 %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-10" style="overflow: auto;">
+            <h1 class="text-center" style="padding: 5px;">Add Student</h1>
+            <form method="POST" class="form-control">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" class="form-control" id="name" name="name" placeholder="John Doe" required>
+                </div>
+                <div class="form-group">
+                    <label for="course">Course</label>
+                    <select class="form-select" id="course" name="course" required>
+                        <option value="" disabled selected>--Select Course--</option>
+                        {% for course in courses['message'] %}
+                            <option value="{{ course['course_id'] }}">{{ course['course_name'] }}</option>
+                        {% endfor %}
+                    </select>                    
+                </div> <br>
+                <button type="submit" class="btn btn-primary col-md-12">Add Student</button>
+                <button type="button" class="btn btn-secondary col-md-12" onclick="window.location.href='/students'" style="margin-top: 10px;">Cancel</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock%}
